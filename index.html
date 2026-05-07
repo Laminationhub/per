@@ -490,6 +490,14 @@
                 renderMonthDropdown();
                 if(currentUserRole === "admin") {
                     renderAgentDropdown();
+                    // Ensure UI elements are visible for admins (in case an agent was logged in previously)
+                    document.getElementById('nav-dashboard').classList.remove('hidden');
+                    document.getElementById('nav-settings').classList.remove('hidden');
+                    const importBtn = document.querySelector('button[onclick="triggerExcelImport()"]');
+                    const exportBtn = document.querySelector('button[onclick="exportToExcel()"]');
+                    if(importBtn) importBtn.classList.remove('hidden');
+                    if(exportBtn) exportBtn.classList.remove('hidden');
+                    document.getElementById('agentDropdown').disabled = false;
                 } else {
                     // Restrict UI for agents
                     document.getElementById('nav-dashboard').classList.add('hidden');
