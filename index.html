@@ -256,6 +256,38 @@
         </div>
     </div>
 
+    <div id="editAgentModal" class="fixed inset-0 modal-bg hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b bg-gray-50">
+                <h2 class="text-xl font-bold text-gray-800">Edit Agent Details</h2>
+                <button onclick="closeEditAgentModal()" class="text-gray-500 hover:text-gray-900 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="editAgentForm" class="p-5">
+                <input type="hidden" id="edit-agentId">
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Agent Name</label>
+                    <input type="text" id="edit-agentName" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Phone Number</label>
+                    <input type="text" id="edit-agentPhone" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Agent Email</label>
+                    <input type="email" id="edit-agentEmail" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-100 text-gray-500 font-medium outline-none" disabled>
+                    <p class="text-xs text-gray-500 mt-1">Login email cannot be changed.</p>
+                </div>
+                <div class="flex justify-between items-center border-t border-gray-100 pt-4">
+                    <button type="button" onclick="sendPasswordReset()" class="text-sm text-blue-600 hover:text-blue-800 font-bold transition-colors">Reset Password</button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="closeEditAgentModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="recordModal" class="fixed inset-0 modal-bg hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl overflow-hidden">
             <div class="flex justify-between items-center p-4 border-b bg-gray-50">
@@ -915,7 +947,8 @@
                     <td class="px-6 py-4 font-bold text-red-500">₹${agentPendingRP.toLocaleString()}</td>
                     <td class="px-6 py-4 font-bold text-red-600">₹${agentPending.toLocaleString()}</td>
                     <td class="px-6 py-4 text-center whitespace-nowrap">
-                        <button onclick="viewAgentDetail('${agent.id}')" class="text-white bg-gray-900 hover:bg-black px-4 py-1.5 rounded-lg text-sm font-medium transition-colors mr-2">Manage Data</button>
+                        <button onclick="viewAgentDetail('${agent.id}')" class="text-white bg-gray-900 hover:bg-black px-4 py-1.5 rounded-lg text-sm font-medium transition-colors mr-1">Manage Data</button>
+                        <button onclick="openEditAgentModal('${agent.id}')" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors mr-1" title="Edit Agent">Edit</button>
                         <button onclick="deleteAgent('${agent.id}')" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors" title="Delete Agent">Delete</button>
                     </td>
                 `;
@@ -1091,6 +1124,55 @@
                 btn.disabled = false; btn.textContent = "Save Agent";
             }
         });
+
+        // --- Edit Agent Modal Logic ---
+        function openEditAgentModal(agentId) {
+            const agent = appState.agents.find(a => a.id === agentId);
+            if(!agent) return;
+            document.getElementById('edit-agentId').value = agent.id;
+            document.getElementById('edit-agentName').value = agent.name || '';
+            document.getElementById('edit-agentPhone').value = agent.phone || '';
+            document.getElementById('edit-agentEmail').value = agent.email || '';
+            document.getElementById('editAgentModal').classList.remove('hidden');
+        }
+
+        function closeEditAgentModal() {
+            document.getElementById('editAgentModal').classList.add('hidden');
+            document.getElementById('editAgentForm').reset();
+        }
+
+        document.getElementById('editAgentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.textContent = "Saving...";
+            
+            const id = document.getElementById('edit-agentId').value;
+            const name = document.getElementById('edit-agentName').value;
+            const phone = document.getElementById('edit-agentPhone').value;
+
+            const agentIndex = appState.agents.findIndex(a => a.id === id);
+            if(agentIndex > -1) {
+                appState.agents[agentIndex].name = name;
+                appState.agents[agentIndex].phone = phone;
+                await saveDataToCloud();
+                renderAgentDropdown();
+                if(!document.getElementById('view-dashboard').classList.contains('hidden')) renderDashboard();
+                closeEditAgentModal();
+            }
+            btn.disabled = false; btn.textContent = "Save";
+        });
+
+        function sendPasswordReset() {
+            const email = document.getElementById('edit-agentEmail').value;
+            if(!email) return;
+            if(confirm("Send a password reset link to " + email + "?")) {
+                auth.sendPasswordResetEmail(email).then(() => {
+                    alert("Password reset email sent successfully! The agent should check their inbox.");
+                }).catch(error => {
+                    alert("Error sending reset email: " + error.message);
+                });
+            }
+        }
 
         function openRecordModal() {
             if (!appState.currentAgentId) { alert("Please add an agent first."); return; }
