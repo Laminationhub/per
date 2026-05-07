@@ -25,58 +25,40 @@
 <body class="bg-gray-100 text-gray-800 font-sans">
 
     <div id="view-auth" class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-6 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
             <div>
-                <h2 class="text-center text-3xl font-extrabold text-blue-700">Billing Hub</h2>
+                <h2 class="mt-2 text-center text-3xl font-extrabold text-blue-700">Billing Hub</h2>
                 <p class="text-center text-sm text-gray-500 font-medium mt-1">Powered By Lamination Hub</p>
+                <h3 class="mt-6 text-center text-xl font-bold text-gray-900" id="auth-title">Sign in to your account</h3>
             </div>
-
-            <form class="mt-4" id="authForm">
-                <div class="flex justify-center space-x-4 mb-6 border-b border-gray-200 pb-2">
-                    <button type="button" onclick="setAuthMode('login')" id="tab-login" class="font-bold text-blue-600 border-b-2 border-blue-600 pb-2 transition-colors">Login</button>
-                    <button type="button" onclick="setAuthMode('register-admin')" id="tab-reg-admin" class="font-bold text-gray-400 pb-2 hover:text-gray-600 transition-colors">Create Shop</button>
-                    <button type="button" onclick="setAuthMode('register-agent')" id="tab-reg-agent" class="font-bold text-gray-400 pb-2 hover:text-gray-600 transition-colors">Join as Agent</button>
-                </div>
-
-                <div class="space-y-4">
-                    <div id="field-shopName" class="hidden">
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Shop/Business Name</label>
-                        <input id="auth-shopName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-                    
-                    <div id="field-agentName" class="hidden">
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Your Full Name</label>
-                        <input id="auth-agentName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div id="field-agentPhone" class="hidden">
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Phone Number</label>
-                        <input id="auth-agentPhone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div id="field-shopCode" class="hidden">
-                        <label class="block text-sm font-bold text-blue-700 mb-1">Shop Code (Ask your Admin)</label>
-                        <input id="auth-shopCode" type="text" placeholder="Paste ID here..." class="w-full px-3 py-2 border border-blue-300 bg-blue-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 font-bold tracking-widest text-center outline-none">
-                    </div>
-
+            <form class="mt-8 space-y-6" id="authForm">
+                <div class="rounded-md shadow-sm space-y-3">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
-                        <input id="auth-email" type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        <input id="auth-email" name="email" type="email" required class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Password</label>
-                        <input id="auth-password" type="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        <input id="auth-password" name="password" type="password" required class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
                     </div>
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="w-full py-3 px-4 font-bold rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors mt-6 shadow-md">
-                    Sign In
-                </button>
-                <div id="auth-error" class="text-red-500 text-sm font-bold text-center hidden mt-3 bg-red-50 p-2 rounded border border-red-200"></div>
+                <div>
+                    <button type="submit" id="auth-submit-btn" class="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                        Sign In
+                    </button>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-sm text-gray-600" id="auth-toggle-text">
+                        Don't have an account? <a href="#" onclick="toggleAuthMode(event)" class="font-bold text-blue-600 hover:text-blue-500">Register here</a>
+                    </p>
+                </div>
+                
+                <div id="auth-error" class="text-red-500 text-sm font-bold text-center hidden mt-2"></div>
             </form>
         </div>
     </div>
-
 
     <div id="main-app" class="hidden">
         
@@ -89,24 +71,24 @@
                             <span class="text-gray-500 font-medium text-xs sm:text-sm ml-2 hidden lg:block">Powered By Lamination Hub</span>
                         </div>
                         <div class="flex space-x-1 sm:space-x-4 pt-2">
-                            <button onclick="switchView('dashboard')" id="nav-dashboard" class="admin-only nav-btn active px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors h-full flex items-center whitespace-nowrap">
+                            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn active px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors h-full flex items-center whitespace-nowrap">
                                 Overall Report
                             </button>
                             <button onclick="switchView('agent')" id="nav-agent" class="nav-btn px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors h-full flex items-center whitespace-nowrap">
-                                Daily Entries
+                                Agent Daily Entries
                             </button>
-                            <button onclick="switchView('settings')" id="nav-settings" class="admin-only nav-btn px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors h-full flex items-center whitespace-nowrap">
+                            <button onclick="switchView('settings')" id="nav-settings" class="nav-btn px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors h-full flex items-center whitespace-nowrap">
                                 Settings
                             </button>
                         </div>
                     </div>
                     <div class="flex items-center">
                         <div class="hidden sm:flex items-center mr-4">
-                            <label class="text-sm font-bold text-gray-600 mr-2">Month:</label>
+                            <label class="text-sm font-bold text-gray-600 mr-2">Report Month:</label>
                             <select id="globalMonthSelector" onchange="changeMonth(this.value)" class="bg-gray-50 border border-gray-300 text-blue-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 outline-none font-bold shadow-sm">
                                 </select>
                         </div>
-                        <button onclick="logoutCloud()" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors whitespace-nowrap flex items-center">
+                        <button onclick="logoutUser()" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors whitespace-nowrap flex items-center">
                             Logout
                         </button>
                     </div>
@@ -116,28 +98,28 @@
 
         <div class="max-w-7xl mx-auto p-4 md:p-8">
 
-            <div id="view-dashboard" class="space-y-6 admin-only">
+            <div id="view-dashboard" class="space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">Overall Agent Report</h1>
                         <p class="text-gray-500" id="dash-subtitle">Consolidated Data</p>
                     </div>
-                    <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center shadow-sm w-full sm:w-auto justify-center">
-                        Your Shop Code: <span id="display-shop-code" class="ml-2 tracking-wider bg-white px-3 py-1 rounded shadow-sm selection:bg-blue-200 text-blue-700 font-black border border-blue-100">---</span>
-                    </div>
+                    <button onclick="openAgentModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded shadow-sm font-medium transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+                        + Add New Agent
+                    </button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-orange-500">
-                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total FR Value</p>
+                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total FR Value (All Agents)</p>
                         <p class="text-3xl font-black text-gray-900" id="dash-totalFr">₹0</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-blue-500">
-                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total New Sims</p>
+                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total New Sims (All Agents)</p>
                         <p class="text-3xl font-black text-gray-900" id="dash-totalNewSims">0</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-red-500">
-                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Overall Pending</p>
+                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Total Overall Pending</p>
                         <p class="text-3xl font-black text-red-600" id="dash-totalPending">₹0</p>
                     </div>
                 </div>
@@ -168,12 +150,11 @@
             </div>
 
             <div id="view-agent" class="hidden space-y-6">
-                
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
-                        <div class="w-full sm:w-auto">
+                        <div>
                             <label class="block text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Viewing Data For:</label>
-                            <select id="agentDropdown" onchange="switchAgent(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-64 p-2.5 outline-none font-bold disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed appearance-none">
+                            <select id="agentDropdown" onchange="switchAgent(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-64 p-2.5 outline-none font-bold">
                                 </select>
                         </div>
                     </div>
@@ -209,7 +190,7 @@
                 </div>
             </div>
 
-            <div id="view-settings" class="hidden space-y-6 admin-only">
+            <div id="view-settings" class="hidden space-y-6">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Application Settings</h1>
                     <p class="text-gray-500">Manage Shop Branding and Dynamic FR Columns</p>
@@ -244,12 +225,44 @@
         </div>
     </div>
 
+    <div id="agentModal" class="fixed inset-0 modal-bg hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b bg-gray-50">
+                <h2 class="text-xl font-bold text-gray-800">Add New Agent</h2>
+                <button onclick="closeAgentModal()" class="text-gray-500 hover:text-gray-900 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="agentForm" class="p-5">
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Agent Name</label>
+                    <input type="text" id="inp-agentName" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Phone Number</label>
+                    <input type="text" id="inp-agentPhone" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Agent Email (Login ID)</label>
+                    <input type="email" id="inp-agentEmail" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Agent Password</label>
+                    <input type="text" id="inp-agentPassword" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="flex justify-end gap-3 border-t border-gray-100 pt-4">
+                    <button type="button" onclick="closeAgentModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors">Save Agent</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="recordModal" class="fixed inset-0 modal-bg hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl overflow-hidden">
             <div class="flex justify-between items-center p-4 border-b bg-gray-50">
                 <h2 class="text-xl font-bold text-gray-800" id="recordModalTitle">Add Data Entry</h2>
                 <button onclick="closeRecordModal()" class="text-gray-500 hover:text-gray-900 text-2xl font-bold">&times;</button>
             </div>
+            
             <form id="recordForm" class="p-5 max-h-[80vh] overflow-y-auto">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div class="col-span-2 md:col-span-4 mb-2 border-b pb-4">
@@ -280,7 +293,7 @@
 
     <script>
         // ==========================================
-        // FIREBASE CONFIGURATION (LIVE)
+        // FIREBASE CONFIGURATION (Using your keys)
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyAMhCsIsX8GxouNd4I0k0Tyt0aU6hWoitQ",
@@ -292,23 +305,30 @@
             appId: "1:341119128616:web:c53cc493e4bdb11117d11d"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Secondary App for creating Agents
+        const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
+        const secondaryAuth = secondaryApp.auth();
+
+        // Global Variables
         const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const todayGlobal = new Date();
+        const currentMonthString = `${MONTH_NAMES[todayGlobal.getMonth()]}-${todayGlobal.getFullYear()}`;
         
         let currentUser = null;
-        let currentSessionRole = null; // 'admin' or 'agent'
-        let unsubscribeSnapshot = null;
+        let currentUserRole = "admin"; // "admin" or "agent"
+        let currentAdminUid = null;    // The shop owner's UID (which we read data from)
+        let unsubscribeSync = null;
+        let isAppInitialized = false;
 
-        // Base Template
         let appState = {
             currentMonth: "All", 
             editingRecordId: null, 
             currentAgentId: null, 
-            shopId: null,
             agents: [],
             records: {},
             settings: {
@@ -325,268 +345,218 @@
         // ==========================================
         // AUTHENTICATION LOGIC
         // ==========================================
-        let authMode = 'login'; // login, register-admin, register-agent
+        let isRegisterMode = false;
 
-        function setAuthMode(mode) {
-            authMode = mode;
+        function toggleAuthMode(e) {
+            e.preventDefault();
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('auth-title').textContent = isRegisterMode ? "Create an Account" : "Sign in to your account";
+            document.getElementById('auth-submit-btn').textContent = isRegisterMode ? "Register" : "Sign In";
+            document.getElementById('auth-toggle-text').innerHTML = isRegisterMode 
+                ? `Already have an account? <a href="#" onclick="toggleAuthMode(event)" class="font-bold text-blue-600 hover:text-blue-500">Sign in here</a>`
+                : `Don't have an account? <a href="#" onclick="toggleAuthMode(event)" class="font-bold text-blue-600 hover:text-blue-500">Register here</a>`;
             document.getElementById('auth-error').classList.add('hidden');
-            
-            // Tab styling
-            ['login', 'register-admin', 'register-agent'].forEach(m => {
-                const btn = document.getElementById(`tab-${m}`);
-                if(mode === m) btn.className = "font-bold text-blue-600 border-b-2 border-blue-600 pb-2 transition-colors";
-                else btn.className = "font-bold text-gray-400 pb-2 hover:text-gray-600 transition-colors";
-            });
-
-            // Toggle Fields
-            document.getElementById('field-shopName').classList.toggle('hidden', mode !== 'register-admin');
-            document.getElementById('field-agentName').classList.toggle('hidden', mode !== 'register-agent');
-            document.getElementById('field-agentPhone').classList.toggle('hidden', mode !== 'register-agent');
-            document.getElementById('field-shopCode').classList.toggle('hidden', mode !== 'register-agent');
-            
-            // Re-label Button
-            const btn = document.getElementById('auth-submit-btn');
-            if (mode === 'login') btn.textContent = 'Sign In';
-            else if (mode === 'register-admin') btn.textContent = 'Create Shop Database';
-            else if (mode === 'register-agent') btn.textContent = 'Join Shop & Register';
         }
 
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
+        document.getElementById('authForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('auth-email').value.trim();
+            const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             const errorDiv = document.getElementById('auth-error');
             errorDiv.classList.add('hidden');
 
-            // Offline Demo Bypass
-            if (firebaseConfig.apiKey === "YOUR_API_KEY_HERE") {
-                alert("Running in Offline Demo Mode.");
-                currentUser = { uid: "offline_admin" };
-                handleOfflineFallback();
-                return;
-            }
-
-            try {
-                // 1. LOGIN
-                if (authMode === 'login') {
-                    await auth.signInWithEmailAndPassword(email, password);
-                } 
-                // 2. ADMIN REGISTER
-                else if (authMode === 'register-admin') {
-                    const shopName = document.getElementById('auth-shopName').value.trim();
-                    const cred = await auth.createUserWithEmailAndPassword(email, password);
-                    const uid = cred.user.uid;
-                    
-                    // Create Profile
-                    await db.collection('users').doc(uid).set({ role: 'admin', shopId: uid, email: email });
-                    // Create Shop DB
-                    await db.collection('shops').doc(uid).set({
-                        settings: {
-                            shopName: shopName,
-                            frTypes: [{ id: 'fr398', label: 'FR 398', rate: 126 }, { id: 'fr365', label: 'FR 365', rate: 115 }, { id: 'fr199', label: 'FR 199', rate: 113 }, { id: 'fr299', label: 'FR 299', rate: 0 }]
-                        },
-                        agents: [],
-                        records: {}
-                    });
-                } 
-                // 3. AGENT REGISTER
-                else if (authMode === 'register-agent') {
-                    const shopCode = document.getElementById('auth-shopCode').value.trim();
-                    const aName = document.getElementById('auth-agentName').value.trim();
-                    const aPhone = document.getElementById('auth-agentPhone').value.trim();
-                    
-                    // Verify Shop Code First
-                    const shopDoc = await db.collection('shops').doc(shopCode).get();
-                    if(!shopDoc.exists) throw new Error("Invalid Shop Code. Ask your admin for the correct code.");
-
-                    const cred = await auth.createUserWithEmailAndPassword(email, password);
-                    const uid = cred.user.uid;
-
-                    // Create Profile
-                    await db.collection('users').doc(uid).set({ role: 'agent', shopId: shopCode, email: email, name: aName, phone: aPhone });
-                    
-                    // Append to Shop DB
-                    const shopData = shopDoc.data();
-                    shopData.agents.push({ id: uid, name: aName, phone: aPhone });
-                    if(!shopData.records) shopData.records = {};
-                    shopData.records[uid] = [];
-                    await db.collection('shops').doc(shopCode).set(shopData);
-                }
-            } catch (err) {
-                errorDiv.textContent = err.message;
-                errorDiv.classList.remove('hidden');
+            if (isRegisterMode) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .catch(err => { errorDiv.textContent = err.message; errorDiv.classList.remove('hidden'); });
+            } else {
+                auth.signInWithEmailAndPassword(email, password)
+                    .catch(err => { errorDiv.textContent = "Invalid email or password."; errorDiv.classList.remove('hidden'); });
             }
         });
 
-        function logoutCloud() {
-            if (unsubscribeSnapshot) unsubscribeSnapshot();
+        function logoutUser() {
+            if(unsubscribeSync) unsubscribeSync();
+            isAppInitialized = false;
             auth.signOut();
         }
 
-        auth.onAuthStateChanged((user) => {
+        // Firebase Auth State Observer
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
+                // Logged In
                 currentUser = user;
                 document.getElementById('view-auth').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
-                initializeCloudSync();
+                
+                // Determine Role
+                const adminDocRef = db.collection('users').doc(user.uid);
+                const adminSnap = await adminDocRef.get();
+                if (adminSnap.exists) {
+                    currentUserRole = "admin";
+                    currentAdminUid = user.uid;
+                    startCloudSync();
+                } else {
+                    const agentDocRef = db.collection('agent_directory').doc(user.uid);
+                    const agentSnap = await agentDocRef.get();
+                    if (agentSnap.exists) {
+                        currentUserRole = "agent";
+                        const agentData = agentSnap.data();
+                        currentAdminUid = agentData.adminUid;
+                        appState.currentAgentId = agentData.agentId;
+                        startCloudSync();
+                    } else {
+                        // First time admin login (no data yet)
+                        currentUserRole = "admin";
+                        currentAdminUid = user.uid;
+                        startCloudSync();
+                    }
+                }
             } else {
+                // Logged Out
                 currentUser = null;
-                currentSessionRole = null;
-                if (unsubscribeSnapshot) unsubscribeSnapshot();
+                currentUserRole = "admin";
+                currentAdminUid = null;
+                if(unsubscribeSync) unsubscribeSync();
+                isAppInitialized = false;
                 document.getElementById('view-auth').classList.remove('hidden');
                 document.getElementById('main-app').classList.add('hidden');
             }
         });
 
+
         // ==========================================
-        // REAL-TIME CLOUD ENGINE
+        // CLOUD SYNC & DATA PERSISTENCE
         // ==========================================
-        async function initializeCloudSync() {
-            try {
-                // Determine user role and target shop
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                if (!userDoc.exists) {
-                    alert("Account setup incomplete.");
-                    auth.signOut();
-                    return;
-                }
-                
-                const profile = userDoc.data();
-                currentSessionRole = profile.role;
-                const shopId = profile.shopId;
-                
-                // Configure UI Permissions
-                const adminElements = document.querySelectorAll('.admin-only');
-                const agentDropdown = document.getElementById('agentDropdown');
-                
-                if (currentSessionRole === 'admin') {
-                    adminElements.forEach(el => el.classList.remove('hidden'));
-                    agentDropdown.disabled = false;
-                    document.getElementById('display-shop-code').textContent = shopId;
-                } else {
-                    adminElements.forEach(el => el.classList.add('hidden'));
-                    agentDropdown.disabled = true; // Lock dropdown
-                }
-
-                // Start Real-Time Listener on the Shop Database
-                unsubscribeSnapshot = db.collection('shops').doc(shopId).onSnapshot((docSnap) => {
-                    if (docSnap.exists) {
-                        const data = docSnap.data();
-                        
-                        // Check if agent was deleted by admin
-                        if (currentSessionRole === 'agent') {
-                            const stillExists = data.agents.find(a => a.id === currentUser.uid);
-                            if (!stillExists) {
-                                alert("Your access to this shop has been revoked by the administrator.");
-                                auth.signOut();
-                                return;
-                            }
-                        }
-
-                        // Preserve local UI state across syncs
-                        const preservedMonth = appState.currentMonth;
-                        const preservedViewedAgent = appState.currentAgentId;
-                        
-                        appState = { ...appState, ...data, shopId: shopId };
-                        appState.currentMonth = preservedMonth || "All";
-                        
-                        if(currentSessionRole === 'agent') {
-                            appState.currentAgentId = currentUser.uid;
-                        } else {
-                            appState.currentAgentId = preservedViewedAgent || (appState.agents.length > 0 ? appState.agents[0].id : null);
-                        }
-
-                        // Seamlessly refresh UI
-                        updateAppBranding();
-                        renderMonthDropdown();
-                        if(!document.getElementById('view-dashboard').classList.contains('hidden')) renderDashboard();
-                        if(!document.getElementById('view-agent').classList.contains('hidden')) {
-                            buildDynamicTableStructure();
-                            renderAgentDropdown();
-                            renderAgentView();
-                        }
+        
+        function startCloudSync() {
+            if (!currentAdminUid) return;
+            
+            if(unsubscribeSync) unsubscribeSync();
+            
+            unsubscribeSync = db.collection('users').doc(currentAdminUid).onSnapshot(async (docSnap) => {
+                if (docSnap.exists) {
+                    const cloudData = docSnap.data();
+                    // Merge incoming data, preserving UI state like currentMonth
+                    const currentMonth = appState.currentMonth || "All";
+                    appState = { ...appState, ...cloudData, currentMonth };
+                    initializeAppUI();
+                } else if (currentUserRole === "admin") {
+                    // Check if they have old local data to migrate to the cloud on first login
+                    const localLegacy = localStorage.getItem("BillingHub_V11_Data");
+                    if (localLegacy) {
+                        const parsed = JSON.parse(localLegacy);
+                        appState = { ...appState, ...parsed };
+                        appState.currentMonth = "All";
                     }
-                });
-
-                // Set initial view
-                switchView(currentSessionRole === 'admin' ? 'dashboard' : 'agent');
-
-            } catch (error) {
-                console.error("Cloud Sync Error:", error);
-                alert("Failed to connect to cloud database.");
-            }
+                    await db.collection('users').doc(currentAdminUid).set(appState);
+                } else {
+                     alert("Shop data not found or admin deleted shop.");
+                     logoutUser();
+                }
+            }, (error) => {
+                console.error("Error fetching from cloud:", error);
+                alert("Cloud connection error. Data may not be up to date.");
+            });
         }
 
         async function saveDataToCloud() {
-            if (!currentUser || !appState.shopId) return;
-
-            const shopData = { ...appState };
-            delete shopData.shopId; // Don't upload local variables
-            delete shopData.currentMonth;
-            delete shopData.currentAgentId;
-            delete shopData.editingRecordId;
+            // Save locally as a backup instantly
+            localStorage.setItem("BillingHub_Cloud_Fallback", JSON.stringify(appState));
             
-            try {
-                if(currentSessionRole === 'admin') {
-                    // Admin overwrites the whole document (Settings, Agents, Records)
-                    await db.collection('shops').doc(appState.shopId).set(shopData);
-                } else {
-                    // Agent only updates their specific records array (Prevents overwriting other agents)
-                    await db.collection('shops').doc(appState.shopId).update({
-                        [`records.${currentUser.uid}`]: appState.records[currentUser.uid]
-                    });
+            // Sync to Firebase targeted update to avoid overwriting other agents
+            if (currentAdminUid) {
+                if(currentUserRole === "admin") {
+                    // Admin saves whole state (settings, agents, etc)
+                    await db.collection('users').doc(currentAdminUid).set(appState)
+                      .catch(err => console.error("Error syncing to cloud:", err));
+                } else if(currentUserRole === "agent") {
+                    // Agent only updates their own records array
+                    await db.collection('users').doc(currentAdminUid).update({
+                        [`records.${appState.currentAgentId}`]: appState.records[appState.currentAgentId] || []
+                    }).catch(err => console.error("Error syncing agent records to cloud:", err));
                 }
-            } catch(e) {
-                console.error("Save failed", e);
-                alert("Failed to save data. Check internet connection.");
             }
         }
 
-        // --- Offline Fallback ---
-        function handleOfflineFallback() {
-            currentSessionRole = 'admin';
-            appState.shopId = "offline";
-            document.getElementById('view-auth').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-            
-            const saved = localStorage.getItem("BillingHub_Offline");
-            if(saved) appState = { ...appState, ...JSON.parse(saved) };
-            
-            document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-            document.getElementById('agentDropdown').disabled = false;
-            document.getElementById('display-shop-code').textContent = "OFFLINE MODE";
-            
-            updateAppBranding();
-            renderMonthDropdown();
-            renderAgentDropdown();
-            buildDynamicTableStructure(); 
-            switchView('dashboard'); 
-        }
 
         // ==========================================
-        // UI HELPERS & FORMATTERS
+        // CORE APP UI INITIALIZATION
         // ==========================================
+        
+        function initializeAppUI() {
+            updateAppBranding();
+            
+            if(!isAppInitialized) {
+                renderMonthDropdown();
+                if(currentUserRole === "admin") {
+                    renderAgentDropdown();
+                } else {
+                    // Restrict UI for agents
+                    document.getElementById('nav-dashboard').classList.add('hidden');
+                    document.getElementById('nav-settings').classList.add('hidden');
+                    
+                    const importBtn = document.querySelector('button[onclick="triggerExcelImport()"]');
+                    const exportBtn = document.querySelector('button[onclick="exportToExcel()"]');
+                    if(importBtn) importBtn.classList.add('hidden');
+                    if(exportBtn) exportBtn.classList.add('hidden');
+                    
+                    // Populate agent dropdown with only themselves
+                    const dropdown = document.getElementById('agentDropdown');
+                    dropdown.innerHTML = '';
+                    const myAgentData = appState.agents.find(a => a.id === appState.currentAgentId);
+                    if(myAgentData) {
+                        const option = document.createElement('option');
+                        option.value = myAgentData.id; 
+                        option.textContent = `${myAgentData.name} (${myAgentData.phone})`;
+                        option.selected = true;
+                        dropdown.appendChild(option);
+                    }
+                    dropdown.disabled = true; // prevent changing
+                }
+                
+                buildDynamicTableStructure(); 
+                
+                if(currentUserRole === "admin") {
+                    switchView('dashboard'); 
+                } else {
+                    switchView('agent');
+                }
+                isAppInitialized = true;
+            } else {
+                // Subsequent syncs just re-render current view
+                if(!document.getElementById('view-dashboard').classList.contains('hidden')) renderDashboard();
+                if(!document.getElementById('view-agent').classList.contains('hidden')) renderAgentView();
+                if(currentUserRole === "admin") renderAgentDropdown(); // Keep dropdown updated for admin
+            }
+        }
+
         function updateAppBranding() {
             document.getElementById('doc-title').textContent = `${appState.settings.shopName} | Powered By Lamination Hub`;
             document.getElementById('nav-shop-name').textContent = appState.settings.shopName;
         }
 
+        // --- Date Normalization ---
         function normalizeImportDate(rawVal) {
             if (!rawVal) return "";
             if (rawVal instanceof Date) return `${rawVal.getDate()}-${MONTH_NAMES[rawVal.getMonth()]}-${rawVal.getFullYear()}`;
             let dStr = String(rawVal).trim();
             if (/^\d{1,2}-[a-zA-Z]{3}-\d{2,4}$/.test(dStr)) return dStr;
+            
             const dmYMatch = dStr.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
             if(dmYMatch) {
-                let day = parseInt(dmYMatch[1]), monthIndex = parseInt(dmYMatch[2]) - 1, year = parseInt(dmYMatch[3]);
+                let day = parseInt(dmYMatch[1]);
+                let monthIndex = parseInt(dmYMatch[2]) - 1;
+                let year = parseInt(dmYMatch[3]);
                 if (year < 100) year += 2000; 
                 if (monthIndex >= 0 && monthIndex < 12 && day <= 31) return `${day}-${MONTH_NAMES[monthIndex]}-${year}`;
             }
+
             if (!isNaN(dStr) && Number(dStr) > 30000) {
                 const jsDate = new Date((Number(dStr) - 25569) * 86400 * 1000);
                 jsDate.setMinutes(jsDate.getMinutes() + jsDate.getTimezoneOffset());
                 return `${jsDate.getDate()}-${MONTH_NAMES[jsDate.getMonth()]}-${jsDate.getFullYear()}`;
             }
+
             const d = new Date(dStr);
             if (!isNaN(d.getTime())) return `${d.getDate()}-${MONTH_NAMES[d.getMonth()]}-${d.getFullYear()}`;
             return dStr; 
@@ -603,12 +573,13 @@
         // ==========================================
         // NAVIGATION & VIEWS
         // ==========================================
+
         function renderMonthDropdown() {
             const dropdown = document.getElementById('globalMonthSelector');
             dropdown.innerHTML = '';
             const allOption = document.createElement('option');
             allOption.value = "All";
-            allOption.textContent = "All Time";
+            allOption.textContent = "All Time (Show Everything)";
             if(appState.currentMonth === "All") allOption.selected = true;
             dropdown.appendChild(allOption);
             const today = new Date();
@@ -616,7 +587,8 @@
                 let d = new Date(today.getFullYear(), today.getMonth() + i, 1);
                 let val = `${MONTH_NAMES[d.getMonth()]}-${d.getFullYear()}`;
                 const option = document.createElement('option');
-                option.value = val; option.textContent = val;
+                option.value = val;
+                option.textContent = val;
                 if(val === appState.currentMonth) option.selected = true;
                 dropdown.appendChild(option);
             }
@@ -624,7 +596,7 @@
 
         function changeMonth(monthYear) {
             appState.currentMonth = monthYear;
-            if(!document.getElementById('view-dashboard').classList.contains('hidden')) renderDashboard();
+            renderDashboard();
             if(!document.getElementById('view-agent').classList.contains('hidden')) renderAgentView();
         }
 
@@ -641,23 +613,28 @@
             document.getElementById(`nav-${viewName}`).classList.add('active');
 
             if (viewName === 'dashboard') renderDashboard();
-            else if (viewName === 'agent') { buildDynamicTableStructure(); renderAgentView(); }
+            else if (viewName === 'agent') {
+                buildDynamicTableStructure();
+                renderAgentView();
+            }
             else if (viewName === 'settings') renderSettings();
         }
 
         // ==========================================
         // SETTINGS & DYNAMIC FR ENGINE
         // ==========================================
+
         function renderSettings() {
             document.getElementById('set-shopName').value = appState.settings.shopName;
             const frContainer = document.getElementById('set-fr-container');
             frContainer.innerHTML = '';
+            
             appState.settings.frTypes.forEach((fr, index) => {
                 const isSystemProtected = (index === 0); 
                 frContainer.innerHTML += `
                     <div class="flex flex-wrap sm:flex-nowrap gap-2 items-end mb-3 bg-gray-50 p-3 rounded border border-gray-200">
                         <div class="w-full sm:w-1/2">
-                            <label class="block text-xs font-bold text-gray-600 mb-1">FR Label</label>
+                            <label class="block text-xs font-bold text-gray-600 mb-1">FR Label (Column Name)</label>
                             <input type="text" class="w-full border border-gray-300 rounded p-2 set-fr-label font-bold" value="${fr.label}" data-idx="${index}" required>
                         </div>
                         <div class="w-full sm:w-1/3">
@@ -666,21 +643,23 @@
                         </div>
                         <div class="w-full sm:w-auto">
                             ${isSystemProtected ? 
-                                `<button type="button" disabled class="bg-gray-200 text-gray-400 px-4 py-2 rounded font-bold w-full sm:w-auto cursor-not-allowed">✕</button>` :
+                                `<button type="button" disabled class="bg-gray-200 text-gray-400 px-4 py-2 rounded font-bold w-full sm:w-auto cursor-not-allowed tooltip" title="Base FR cannot be removed">✕</button>` :
                                 `<button type="button" onclick="removeFrType(${index})" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded font-bold w-full sm:w-auto transition-colors">✕</button>`
                             }
                         </div>
-                    </div>`;
+                    </div>
+                `;
             });
         }
 
         function addFrType() {
-            appState.settings.frTypes.push({ id: 'fr_' + Date.now().toString().slice(-6), label: 'New FR', rate: 0 });
+            const newId = 'fr_' + Date.now().toString().slice(-6);
+            appState.settings.frTypes.push({ id: newId, label: 'New FR', rate: 0 });
             renderSettings();
         }
 
         function removeFrType(index) {
-            if(confirm("Removing this FR Type hides its data. Proceed?")) {
+            if(confirm("Warning: Removing this FR Type will hide its data from the daily entries tables. Proceed?")) {
                 appState.settings.frTypes.splice(index, 1);
                 renderSettings();
             }
@@ -695,9 +674,11 @@
                 appState.settings.frTypes[i].label = labelInp.value.trim();
                 appState.settings.frTypes[i].rate = parseFloat(rates[i].value) || 0;
             });
-            saveDataToCloud(); 
-            // Note: Listener will trigger UI refresh automatically!
-            alert("Settings saved successfully to Cloud!");
+
+            saveDataToCloud();
+            updateAppBranding();
+            buildDynamicTableStructure(); 
+            alert("Settings saved successfully! Tables and calculations have been updated.");
         });
 
         // ==========================================
@@ -707,17 +688,38 @@
             const cardsContainer = document.getElementById('dynamic-summary-cards');
             let cardsHtml = '';
             appState.settings.frTypes.forEach(fr => {
-                cardsHtml += `<div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"><p class="text-sm text-gray-500 font-medium truncate">${fr.label} Value</p><p class="text-xl font-bold text-gray-900" id="val-${fr.id}">0</p></div>`;
+                cardsHtml += `
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <p class="text-sm text-gray-500 font-medium truncate">${fr.label} Value</p>
+                    <p class="text-xl font-bold text-gray-900" id="val-${fr.id}">0</p>
+                </div>`;
             });
             cardsHtml += `
-                <div class="bg-orange-500 p-4 rounded-lg shadow-sm border border-orange-600 text-white"><p class="text-sm font-medium text-orange-100">Total FR Amount</p><p class="text-2xl font-bold" id="val-totalFr">0</p></div>
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"><p class="text-sm text-gray-500 font-medium">Total New Sim Sale</p><p class="text-xl font-bold text-gray-900" id="val-totalNewSim">0</p></div>`;
+                <div class="bg-orange-500 p-4 rounded-lg shadow-sm border border-orange-600 text-white">
+                    <p class="text-sm font-medium text-orange-100">Total FR Amount</p>
+                    <p class="text-2xl font-bold" id="val-totalFr">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <p class="text-sm text-gray-500 font-medium">Total New Sim Sale</p>
+                    <p class="text-xl font-bold text-gray-900" id="val-totalNewSim">0</p>
+                </div>`;
             cardsContainer.innerHTML = cardsHtml;
 
             const thead = document.getElementById('dynamic-report-head');
             let headHtml = `<tr><th class="px-4 py-3 border-b border-gray-200">Date</th>`;
-            appState.settings.frTypes.forEach(fr => { headHtml += `<th class="px-4 py-3 border-b border-gray-200 text-red-600">${fr.label}</th>`; });
-            headHtml += `<th class="px-4 py-3 border-b border-gray-200 text-blue-600">Sim Taken</th><th class="px-4 py-3 border-b border-gray-200 text-blue-600">Recharge</th><th class="px-4 py-3 border-b border-gray-200 text-blue-600">Rchg Paid/Not</th><th class="px-4 py-3 border-b border-gray-200 text-red-600">Pending R/P</th><th class="px-4 py-3 border-b border-gray-200 text-green-600">New Sim</th><th class="px-4 py-3 border-b border-gray-200 text-green-600">Amount</th><th class="px-4 py-3 border-b border-gray-200 text-red-600">Pending</th><th class="px-4 py-3 border-b border-gray-200 text-center">Actions</th></tr>`;
+            appState.settings.frTypes.forEach(fr => {
+                headHtml += `<th class="px-4 py-3 border-b border-gray-200 text-red-600">${fr.label}</th>`;
+            });
+            headHtml += `
+                <th class="px-4 py-3 border-b border-gray-200 text-blue-600">Sim Taken</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-blue-600">Recharge</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-blue-600">Rchg Paid/Not</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-red-600">Pending R/P</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-green-600">New Sim</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-green-600">Amount</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-red-600">Pending</th>
+                <th class="px-4 py-3 border-b border-gray-200 text-center">Actions</th>
+            </tr>`;
             thead.innerHTML = headHtml;
 
             const tfoot = document.getElementById('dynamic-report-foot');
@@ -727,19 +729,34 @@
                 countRow += `<td class="px-4 py-3 text-red-600" id="total-${fr.id}">0</td>`;
                 valRow += `<td class="px-4 py-3 text-black font-bold" id="foot-val-${fr.id}">0</td>`;
             });
-            countRow += `<td class="px-4 py-3 text-blue-600" id="total-simTaken">0</td><td class="px-4 py-3 text-blue-600" id="total-recharge">0</td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td></tr>`;
-            valRow += `<td class="px-4 py-3 text-black font-bold" id="foot-total-simTakenVal">0</td><td class="px-4 py-3 text-gray-800 text-right" colspan="2">Recharge payment pending:</td><td class="px-4 py-3 text-red-600 text-sm font-bold" id="total-pendingRP">0</td><td class="px-4 py-3 text-gray-800 text-right">Total New Sim sale:</td><td class="px-4 py-3 text-green-600 text-sm font-bold" id="foot-total-newSim">0</td><td class="px-4 py-3 text-red-600 text-sm font-bold" id="total-pending">0</td><td class="px-4 py-3"></td></tr>`;
+            countRow += `
+                <td class="px-4 py-3 text-blue-600" id="total-simTaken">0</td>
+                <td class="px-4 py-3 text-blue-600" id="total-recharge">0</td>
+                <td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td><td class="px-4 py-3"></td></tr>`;
+            valRow += `
+                <td class="px-4 py-3 text-black font-bold" id="foot-total-simTakenVal">0</td>
+                <td class="px-4 py-3 text-gray-800 text-right" colspan="2">Recharge payment pending:</td>
+                <td class="px-4 py-3 text-red-600 text-sm font-bold" id="total-pendingRP">0</td>
+                <td class="px-4 py-3 text-gray-800 text-right">Total New Sim sale:</td>
+                <td class="px-4 py-3 text-green-600 text-sm font-bold" id="foot-total-newSim">0</td>
+                <td class="px-4 py-3 text-red-600 text-sm font-bold" id="total-pending">0</td>
+                <td class="px-4 py-3"></td></tr>`;
             tfoot.innerHTML = countRow + valRow;
         }
 
         // ==========================================
         // AGENT TRACKING LOGIC
         // ==========================================
-        function triggerExcelImport() { document.getElementById('importExcelInput').click(); }
+
+        function triggerExcelImport() {
+            if (!appState.currentAgentId) { alert("Please add an agent first before importing data."); return; }
+            document.getElementById('importExcelInput').click();
+        }
 
         function importFromExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -752,8 +769,10 @@
                         const rowText = rawData[i].join("").toLowerCase();
                         if (rowText.includes("date") || rowText.includes("sim taken")) { headerRowIndex = i; break; }
                     }
+
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, {range: headerRowIndex, raw: true, defval: ""});
-                    
+                    if(jsonData.length === 0) { alert("No valid data found under the headers."); return; }
+
                     function getVal(row, possibleKeys) {
                         const normalizedRow = {};
                         for(let key in row) normalizedRow[key.replace(/[\s\/\\]/g, '').toLowerCase()] = row[key];
@@ -775,11 +794,19 @@
                         let rec = {
                             id: 'rec_' + Date.now() + Math.random().toString(36).substr(2, 9),
                             date: normalizeImportDate(rawDateData),
-                            simTaken: getVal(row, ["Sim Taken", "SimTaken"]), recharge: getVal(row, ["Recharge"]),
-                            rPaid: getVal(row, ["Recharge Paid/Not", "Rchg Paid/Not", "Paid/Not"]), pendingRP: getVal(row, ["Pending R/P", "Pending RP"]),
-                            newSim: getVal(row, ["New Sim", "NewSim"]), amount: getVal(row, ["Amount"]), pending: getVal(row, ["Pending"])
+                            simTaken: getVal(row, ["Sim Taken", "SimTaken"]), 
+                            recharge: getVal(row, ["Recharge"]),
+                            rPaid: getVal(row, ["Recharge Paid/Not", "Rchg Paid/Not", "Paid/Not"]), 
+                            pendingRP: getVal(row, ["Pending R/P", "Pending RP"]),
+                            newSim: getVal(row, ["New Sim", "NewSim"]), 
+                            amount: getVal(row, ["Amount"]), 
+                            pending: getVal(row, ["Pending"])
                         };
-                        appState.settings.frTypes.forEach(fr => { rec[fr.id] = getVal(row, [fr.label, fr.label.replace(/\s+/g, '')]); });
+
+                        appState.settings.frTypes.forEach(fr => {
+                            rec[fr.id] = getVal(row, [fr.label, fr.label.replace(/\s+/g, '')]);
+                        });
+
                         newRecords.push(rec);
                         importCount++;
                     });
@@ -787,19 +814,20 @@
                     if(importCount > 0) {
                         appState.records[appState.currentAgentId] = [...(appState.records[appState.currentAgentId] || []), ...newRecords];
                         saveDataToCloud(); 
+                        renderAgentView(); 
                         document.getElementById('importExcelInput').value = ""; 
-                        alert(`${importCount} records imported successfully to Cloud!`);
-                    } else { alert("Could not read records. Check file."); }
+                        alert(`${importCount} records imported successfully!`);
+                    } else { alert("Could not read records. Check the file structure."); }
                 } catch(error) { alert("Error reading Excel file."); console.error(error); }
             };
             reader.readAsArrayBuffer(file);
         }
 
         function exportToExcel() {
-            if (!appState.currentAgentId) { alert("Please select an agent."); return; }
+            if (!appState.currentAgentId) { alert("Please add an agent first."); return; }
             const allRecords = appState.records[appState.currentAgentId] || [];
             const records = appState.currentMonth === "All" ? allRecords : allRecords.filter(r => r.date.includes(appState.currentMonth));
-            if(records.length === 0) { alert("No data to export."); return; }
+            if(records.length === 0) { alert("No data to export for this selection."); return; }
 
             const excelData = records.map(r => {
                 let obj = { "Date": r.date };
@@ -808,17 +836,35 @@
                 obj["Pending R/P"] = r.pendingRP; obj["New Sim"] = r.newSim; obj["Amount"] = r.amount; obj["Pending"] = r.pending;
                 return obj;
             });
-            const ws = XLSX.utils.json_to_sheet(excelData); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+            const ws = XLSX.utils.json_to_sheet(excelData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Agent_Data");
+
             const agentName = appState.agents.find(a => a.id === appState.currentAgentId).name.replace(/\s+/g, '_');
-            XLSX.writeFile(wb, `${agentName}_Report_${appState.currentMonth.replace(/\s+/g, '')}.xlsx`);
+            const fileMonth = appState.currentMonth === "All" ? "All_Time" : appState.currentMonth.replace(/\s+/g, '');
+            XLSX.writeFile(wb, `${agentName}_Report_${fileMonth}.xlsx`);
         }
 
-        function deleteAgent(agentId) {
-            if(confirm("⚠️ Delete this Agent and ALL their daily records? This cannot be undone!")) {
+        async function deleteAgent(agentId) {
+            if(confirm("⚠️ WARNING: Are you sure you want to delete this Agent and ALL of their daily records? This cannot be undone!")) {
+                const agentData = appState.agents.find(a => a.id === agentId);
                 appState.agents = appState.agents.filter(a => a.id !== agentId);
                 delete appState.records[agentId];
                 if (appState.currentAgentId === agentId) appState.currentAgentId = appState.agents.length > 0 ? appState.agents[0].id : null;
-                saveDataToCloud(); 
+                
+                await saveDataToCloud(); 
+                
+                if(agentData && agentData.authUid) {
+                    await db.collection('agent_directory').doc(agentData.authUid).delete().catch(e=>console.error(e));
+                }
+
+                renderAgentDropdown(); 
+                renderDashboard();
+                if(!document.getElementById('view-agent').classList.contains('hidden')) {
+                    if (appState.currentAgentId) switchAgent(appState.currentAgentId);
+                    else switchView('dashboard'); 
+                }
             }
         }
 
@@ -828,17 +874,23 @@
             const tbody = document.getElementById('dashboardTableBody');
             tbody.innerHTML = '';
 
-            if (appState.agents.length === 0) tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-8 text-center text-gray-500 font-medium">No agents found. Give your Shop Code to agents to register.</td></tr>`;
+            if (appState.agents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-8 text-center text-gray-500 font-medium">No agents found. Click '+ Add New Agent' to get started.</td></tr>`;
+            }
 
             appState.agents.forEach(agent => {
                 const allRecords = appState.records[agent.id] || [];
                 const records = appState.currentMonth === "All" ? allRecords : allRecords.filter(r => r.date.includes(appState.currentMonth));
                 
                 let agentTotalFrValue = 0, agentSims = 0, agentPending = 0, agentRecharge = 0, agentPendingRP = 0;
+
                 records.forEach(r => {
                     appState.settings.frTypes.forEach(fr => { agentTotalFrValue += (parseInt(r[fr.id]) || 0) * fr.rate; });
-                    agentSims += parseInt(r.newSim) || 0; agentRecharge += parseInt(r.recharge) || 0; agentPendingRP += parseInt(r.pendingRP) || 0;
-                    if(r.pending.trim().toLowerCase() !== 'paid' && r.pending.trim() !== '') agentPending += parseInt(r.pending) || 0;
+                    agentSims += parseInt(r.newSim) || 0;
+                    agentRecharge += parseInt(r.recharge) || 0;
+                    agentPendingRP += parseInt(r.pendingRP) || 0;
+                    const pText = r.pending.trim().toLowerCase();
+                    if(pText !== 'paid' && pText !== '') agentPending += parseInt(pText) || 0;
                 });
 
                 globalFrValue += agentTotalFrValue; globalNewSims += agentSims; globalPending += agentPending;
@@ -855,41 +907,33 @@
                     <td class="px-6 py-4 font-bold text-red-500">₹${agentPendingRP.toLocaleString()}</td>
                     <td class="px-6 py-4 font-bold text-red-600">₹${agentPending.toLocaleString()}</td>
                     <td class="px-6 py-4 text-center whitespace-nowrap">
-                        <button onclick="viewAgentDetail('${agent.id}')" class="text-white bg-gray-900 hover:bg-black px-4 py-1.5 rounded-lg text-sm font-medium mr-2">Manage</button>
-                        <button onclick="deleteAgent('${agent.id}')" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg text-sm font-medium">Delete</button>
-                    </td>`;
+                        <button onclick="viewAgentDetail('${agent.id}')" class="text-white bg-gray-900 hover:bg-black px-4 py-1.5 rounded-lg text-sm font-medium transition-colors mr-2">Manage Data</button>
+                        <button onclick="deleteAgent('${agent.id}')" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors" title="Delete Agent">Delete</button>
+                    </td>
+                `;
                 tbody.appendChild(tr);
             });
+
             document.getElementById('dash-totalFr').textContent = `₹${globalFrValue.toLocaleString()}`;
             document.getElementById('dash-totalNewSims').textContent = globalNewSims.toLocaleString();
             document.getElementById('dash-totalPending').textContent = `₹${globalPending.toLocaleString()}`;
         }
 
         function viewAgentDetail(agentId) {
-            appState.currentAgentId = agentId; document.getElementById('agentDropdown').value = agentId; switchView('agent');
+            appState.currentAgentId = agentId;
+            document.getElementById('agentDropdown').value = agentId;
+            switchView('agent');
         }
 
         function renderAgentDropdown() {
             const dropdown = document.getElementById('agentDropdown');
             dropdown.innerHTML = '';
-            
-            // Only show logged in agent if role is agent
-            if (currentSessionRole === 'agent') {
-                const me = appState.agents.find(a => a.id === currentUser.uid);
-                if (me) {
-                    const option = document.createElement('option');
-                    option.value = me.id; option.textContent = `${me.name} (${me.phone})`;
-                    option.selected = true;
-                    dropdown.appendChild(option);
-                }
-            } else {
-                appState.agents.forEach(agent => {
-                    const option = document.createElement('option');
-                    option.value = agent.id; option.textContent = `${agent.name} (${agent.phone})`;
-                    if(agent.id === appState.currentAgentId) option.selected = true;
-                    dropdown.appendChild(option);
-                });
-            }
+            appState.agents.forEach(agent => {
+                const option = document.createElement('option');
+                option.value = agent.id; option.textContent = `${agent.name} (${agent.phone})`;
+                if(agent.id === appState.currentAgentId) option.selected = true;
+                dropdown.appendChild(option);
+            });
         }
 
         function switchAgent(agentId) {
@@ -904,16 +948,17 @@
             tbody.innerHTML = '';
             
             if (!appState.currentAgentId || appState.agents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="15" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">No agents exist.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="15" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">No agents exist. Please create an agent first.</td></tr>`;
                 calculateAgentTotals(); return;
             }
             
             const allRecords = appState.records[appState.currentAgentId] || [];
             const records = appState.currentMonth === "All" ? allRecords : allRecords.filter(r => r.date.includes(appState.currentMonth));
+
             records.sort((a, b) => new Date(toNativeDate(a.date)) - new Date(toNativeDate(b.date)));
 
             if(records.length === 0) {
-                const msg = appState.currentMonth === "All" ? "No entries found." : `No entries found for ${appState.currentMonth}.`;
+                const msg = appState.currentMonth === "All" ? "No entries found for this agent." : `No entries found for ${appState.currentMonth}. Select 'All Time' from the top right to see imported data.`;
                 tbody.innerHTML = `<tr><td colspan="15" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">${msg}</td></tr>`;
             }
 
@@ -922,19 +967,31 @@
                 let pendingClass = row.pending && row.pending.toLowerCase() === 'paid' ? 'text-green-600 font-medium' : 'data-cell pending font-medium text-red-600';
 
                 let trHtml = `<td class="px-4 py-3 font-bold text-gray-800">${row.date}</td>`;
+                
                 appState.settings.frTypes.forEach(fr => { trHtml += `<td class="px-4 py-3 data-cell ${fr.id}">${row[fr.id] || ''}</td>`; });
 
                 trHtml += `
-                    <td class="px-4 py-3 data-cell simTaken">${row.simTaken || ''}</td><td class="px-4 py-3 data-cell recharge">${row.recharge || ''}</td><td class="px-4 py-3"><span class="${rPaidClass}">${row.rPaid || ''}</span></td>
-                    <td class="px-4 py-3 data-cell pendingRP">${row.pendingRP || ''}</td><td class="px-4 py-3 data-cell newSim">${row.newSim || ''}</td><td class="px-4 py-3 data-cell amount">${row.amount || ''}</td>
+                    <td class="px-4 py-3 data-cell simTaken">${row.simTaken || ''}</td>
+                    <td class="px-4 py-3 data-cell recharge">${row.recharge || ''}</td>
+                    <td class="px-4 py-3"><span class="${rPaidClass}">${row.rPaid || ''}</span></td>
+                    <td class="px-4 py-3 data-cell pendingRP">${row.pendingRP || ''}</td>
+                    <td class="px-4 py-3 data-cell newSim">${row.newSim || ''}</td>
+                    <td class="px-4 py-3 data-cell amount">${row.amount || ''}</td>
                     <td class="px-4 py-3 ${pendingClass}">${row.pending || ''}</td>
                     <td class="px-4 py-3 text-center whitespace-nowrap">
-                        <button onclick="editRecord('${row.id}')" class="text-blue-500 hover:bg-blue-50 p-1.5 rounded mr-1 tooltip">✎</button>
-                        <button onclick="deleteRecord('${row.id}')" class="text-red-400 hover:bg-red-50 p-1.5 rounded tooltip">✕</button>
-                    </td>`;
+                        <button onclick="editRecord('${row.id}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded p-1.5 transition-colors mr-1 tooltip" title="Edit Entry">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        </button>
+                        <button onclick="deleteRecord('${row.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded p-1.5 transition-colors tooltip" title="Delete Entry">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </td>
+                `;
                 
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-gray-100 hover:bg-blue-50/50 bg-white"; tr.innerHTML = trHtml; tbody.appendChild(tr);
+                tr.className = "border-b border-gray-100 hover:bg-blue-50/50 transition-colors bg-white";
+                tr.innerHTML = trHtml;
+                tbody.appendChild(tr);
             });
             calculateAgentTotals();
         }
@@ -952,7 +1009,8 @@
             
             let totalPending = 0;
             document.querySelectorAll('.data-cell.pending').forEach(cell => {
-                if(cell.textContent.trim().toLowerCase() !== 'paid' && cell.textContent.trim() !== '') totalPending += parseInt(cell.textContent) || 0;
+                const textVal = cell.textContent.trim().toLowerCase();
+                if(textVal !== 'paid' && textVal !== '') totalPending += parseInt(textVal) || 0;
             });
             if(document.getElementById('total-pending')) document.getElementById('total-pending').textContent = totalPending;
             
@@ -960,7 +1018,9 @@
             appState.settings.frTypes.forEach(fr => {
                 document.querySelectorAll(`.data-cell.${fr.id}`).forEach(cell => { sums[fr.id] += parseInt(cell.textContent) || 0; });
                 if(document.getElementById(`total-${fr.id}`)) document.getElementById(`total-${fr.id}`).textContent = sums[fr.id];
-                let value = sums[fr.id] * fr.rate; totalFrAmount += value;
+                
+                let value = sums[fr.id] * fr.rate;
+                totalFrAmount += value;
                 if(document.getElementById(`val-${fr.id}`)) document.getElementById(`val-${fr.id}`).textContent = value;
                 if(document.getElementById(`foot-val-${fr.id}`)) document.getElementById(`foot-val-${fr.id}`).textContent = value;
             });
@@ -970,61 +1030,154 @@
             if(document.getElementById('foot-total-newSim')) document.getElementById('foot-total-newSim').textContent = sums.newSim;
         }
 
+        // --- Modals Logic ---
+        function openAgentModal() { document.getElementById('agentModal').classList.remove('hidden'); }
+        function closeAgentModal() { document.getElementById('agentModal').classList.add('hidden'); document.getElementById('agentForm').reset(); }
+
+        document.getElementById('agentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.textContent = "Saving...";
+
+            const agentName = document.getElementById('inp-agentName').value;
+            const agentPhone = document.getElementById('inp-agentPhone').value;
+            const agentEmail = document.getElementById('inp-agentEmail').value;
+            const agentPassword = document.getElementById('inp-agentPassword').value;
+
+            try {
+                // Create Auth Account in secondary app
+                const userCred = await secondaryAuth.createUserWithEmailAndPassword(agentEmail, agentPassword);
+                const agentAuthUid = userCred.user.uid;
+
+                // Add to Global Agent Directory
+                const newId = 'agent_' + Date.now();
+                await db.collection('agent_directory').doc(agentAuthUid).set({
+                    adminUid: currentAdminUid,
+                    agentId: newId,
+                    email: agentEmail,
+                    role: 'agent'
+                });
+
+                appState.agents.push({
+                    id: newId,
+                    authUid: agentAuthUid,
+                    name: agentName,
+                    phone: agentPhone,
+                    email: agentEmail
+                });
+                appState.records[newId] = [];
+                
+                if(appState.agents.length === 1) appState.currentAgentId = newId;
+                
+                await saveDataToCloud(); 
+                
+                renderAgentDropdown();
+                closeAgentModal();
+                if(!document.getElementById('view-dashboard').classList.contains('hidden')) renderDashboard();
+                else { switchAgent(newId); document.getElementById('agentDropdown').value = newId; }
+            } catch(error) {
+                alert("Error creating agent: " + error.message);
+            } finally {
+                btn.disabled = false; btn.textContent = "Save Agent";
+            }
+        });
+
         function openRecordModal() {
-            if (!appState.currentAgentId) { alert("Please select an agent."); return; }
-            appState.editingRecordId = null; document.getElementById('recordModalTitle').textContent = "Add Data Entry";
+            if (!appState.currentAgentId) { alert("Please add an agent first."); return; }
+            appState.editingRecordId = null; 
+            document.getElementById('recordModalTitle').textContent = "Add Data Entry";
+            
             const frInputsDiv = document.getElementById('dynamic-fr-inputs');
             frInputsDiv.innerHTML = '';
             appState.settings.frTypes.forEach(fr => {
-                frInputsDiv.innerHTML += `<div class="bg-orange-50 p-3 rounded-lg border border-orange-100"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">${fr.label}</label><input type="number" id="inp-${fr.id}" class="w-full border border-orange-200 rounded p-2 text-sm dynamic-fr-val" min="0" data-id="${fr.id}"></div>`;
+                frInputsDiv.innerHTML += `
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                    <label class="block text-xs font-bold text-orange-800 uppercase mb-1">${fr.label}</label>
+                    <input type="number" id="inp-${fr.id}" class="w-full border border-orange-200 rounded p-2 text-sm dynamic-fr-val" min="0" data-id="${fr.id}">
+                </div>`;
             });
+
             document.getElementById('recordModal').classList.remove('hidden');
-            const today = new Date(); document.getElementById('inp-date').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const today = new Date();
+            document.getElementById('inp-date').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         }
 
         function editRecord(recordId) {
-            appState.editingRecordId = recordId; document.getElementById('recordModalTitle').textContent = "Edit Data Entry";
+            appState.editingRecordId = recordId; 
+            document.getElementById('recordModalTitle').textContent = "Edit Data Entry";
+            
             const record = appState.records[appState.currentAgentId].find(r => r.id === recordId);
             if(!record) return;
-            const frInputsDiv = document.getElementById('dynamic-fr-inputs'); frInputsDiv.innerHTML = '';
+
+            const frInputsDiv = document.getElementById('dynamic-fr-inputs');
+            frInputsDiv.innerHTML = '';
             appState.settings.frTypes.forEach(fr => {
-                frInputsDiv.innerHTML += `<div class="bg-orange-50 p-3 rounded-lg border border-orange-100"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">${fr.label}</label><input type="number" id="inp-${fr.id}" class="w-full border border-orange-200 rounded p-2 text-sm dynamic-fr-val" min="0" data-id="${fr.id}"></div>`;
+                frInputsDiv.innerHTML += `
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                    <label class="block text-xs font-bold text-orange-800 uppercase mb-1">${fr.label}</label>
+                    <input type="number" id="inp-${fr.id}" class="w-full border border-orange-200 rounded p-2 text-sm dynamic-fr-val" min="0" data-id="${fr.id}">
+                </div>`;
             });
+
             document.getElementById('inp-date').value = toNativeDate(record.date); 
-            appState.settings.frTypes.forEach(fr => { if(document.getElementById(`inp-${fr.id}`)) document.getElementById(`inp-${fr.id}`).value = record[fr.id] || ''; });
-            document.getElementById('inp-simTaken').value = record.simTaken || ''; document.getElementById('inp-recharge').value = record.recharge || ''; document.getElementById('inp-rPaid').value = record.rPaid || ''; document.getElementById('inp-pendingRP').value = record.pendingRP || ''; document.getElementById('inp-newSim').value = record.newSim || ''; document.getElementById('inp-amount').value = record.amount || ''; document.getElementById('inp-pending').value = record.pending || '';
+            appState.settings.frTypes.forEach(fr => {
+                if(document.getElementById(`inp-${fr.id}`)) document.getElementById(`inp-${fr.id}`).value = record[fr.id] || '';
+            });
+
+            document.getElementById('inp-simTaken').value = record.simTaken || '';
+            document.getElementById('inp-recharge').value = record.recharge || '';
+            document.getElementById('inp-rPaid').value = record.rPaid || '';
+            document.getElementById('inp-pendingRP').value = record.pendingRP || '';
+            document.getElementById('inp-newSim').value = record.newSim || '';
+            document.getElementById('inp-amount').value = record.amount || '';
+            document.getElementById('inp-pending').value = record.pending || '';
+            
             document.getElementById('recordModal').classList.remove('hidden');
         }
         
-        function closeRecordModal() { appState.editingRecordId = null; document.getElementById('recordModal').classList.add('hidden'); document.getElementById('recordForm').reset(); }
+        function closeRecordModal() { 
+            appState.editingRecordId = null; 
+            document.getElementById('recordModal').classList.add('hidden'); 
+            document.getElementById('recordForm').reset(); 
+        }
 
         document.getElementById('recordForm').addEventListener('submit', (e) => {
             e.preventDefault();
+            
             const rawDate = document.getElementById('inp-date').value, dateObj = new Date(rawDate);
             const formattedDate = `${dateObj.getDate()}-${MONTH_NAMES[dateObj.getMonth()]}-${dateObj.getFullYear()}`;
-            const newRecordData = {
-                date: formattedDate, simTaken: document.getElementById('inp-simTaken').value, recharge: document.getElementById('inp-recharge').value, rPaid: document.getElementById('inp-rPaid').value, pendingRP: document.getElementById('inp-pendingRP').value, newSim: document.getElementById('inp-newSim').value, amount: document.getElementById('inp-amount').value, pending: document.getElementById('inp-pending').value
-            };
-            document.querySelectorAll('.dynamic-fr-val').forEach(inp => { newRecordData[inp.dataset.id] = inp.value; });
             
-            // Safety Init
-            if(!appState.records[appState.currentAgentId]) appState.records[appState.currentAgentId] = [];
+            const newRecordData = {
+                date: formattedDate, 
+                simTaken: document.getElementById('inp-simTaken').value,
+                recharge: document.getElementById('inp-recharge').value, 
+                rPaid: document.getElementById('inp-rPaid').value, 
+                pendingRP: document.getElementById('inp-pendingRP').value,
+                newSim: document.getElementById('inp-newSim').value, 
+                amount: document.getElementById('inp-amount').value, 
+                pending: document.getElementById('inp-pending').value
+            };
+
+            document.querySelectorAll('.dynamic-fr-val').forEach(inp => { newRecordData[inp.dataset.id] = inp.value; });
 
             if (appState.editingRecordId) {
                 let recordsArray = appState.records[appState.currentAgentId];
                 const recordIndex = recordsArray.findIndex(r => r.id === appState.editingRecordId);
                 if(recordIndex > -1) recordsArray[recordIndex] = { ...recordsArray[recordIndex], ...newRecordData };
-            } else { appState.records[appState.currentAgentId].push({ id: 'rec_' + Date.now(), ...newRecordData }); }
+            } else { 
+                appState.records[appState.currentAgentId].push({ id: 'rec_' + Date.now(), ...newRecordData }); 
+            }
             
             saveDataToCloud(); 
+            renderAgentView(); 
             closeRecordModal();
-            // Note: Listener will trigger UI refresh!
         });
 
         function deleteRecord(recordId) {
             if(confirm("Are you sure you want to delete this entry?")) {
                 appState.records[appState.currentAgentId] = appState.records[appState.currentAgentId].filter(r => r.id !== recordId);
                 saveDataToCloud(); 
+                renderAgentView();
             }
         }
     </script>
