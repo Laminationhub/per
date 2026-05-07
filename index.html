@@ -395,8 +395,13 @@
                 if (appUser) {
                     appState.currentUser = appUser;
                     document.getElementById('login-error').classList.add('hidden');
-                    await fetchAgents();
-                    initializeUIForUser();
+                    try {
+                        await fetchAgents();
+                        initializeUIForUser();
+                    } catch (error) {
+                        showLoginError("Database Error: " + error.message + " (Check Firestore Rules)");
+                        await signOut(auth);
+                    }
                 } else {
                     signOut(auth);
                 }
