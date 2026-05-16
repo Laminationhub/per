@@ -200,11 +200,24 @@
 
             <div id="view-porting" class="hidden space-y-6">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto flex-wrap">
                         <div>
                             <label class="block text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Viewing Data For:</label>
                             <select id="portingAgentDropdown" onchange="switchPortingAgent(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-64 p-2.5 outline-none font-bold">
                             </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <div>
+                                <label class="block text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">From Date:</label>
+                                <input type="date" id="portingFilterFrom" onchange="renderPortingView()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none font-bold w-full">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">To Date:</label>
+                                <input type="date" id="portingFilterTo" onchange="renderPortingView()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none font-bold w-full">
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="clearPortingDateFilter()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2.5 rounded-lg text-sm font-bold transition-colors">Clear</button>
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 w-full xl:w-auto justify-start xl:justify-end">
@@ -1400,24 +1413,47 @@
             renderPortingView();
         }
 
+        function clearPortingDateFilter() {
+            if(document.getElementById('portingFilterFrom')) document.getElementById('portingFilterFrom').value = '';
+            if(document.getElementById('portingFilterTo')) document.getElementById('portingFilterTo').value = '';
+            renderPortingView();
+        }
+
         function renderPortingView() {
             const tbody = document.getElementById('portingTableBody');
             if(!tbody) return;
             tbody.innerHTML = '';
             
             if (!appState.currentAgentId || appState.agents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">No agents exist. Please create an agent first.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">No agents exist. Please create an agent first.</td></tr>`;
                 return;
             }
             
             const allRecords = appState.portingRecords[appState.currentAgentId] || [];
-            const records = appState.currentMonth === "All" ? allRecords : allRecords.filter(r => r.date.includes(appState.currentMonth));
+            let records = appState.currentMonth === "All" ? allRecords : allRecords.filter(r => r.date.includes(appState.currentMonth));
+
+            // Apply Date Filter
+            const fromVal = document.getElementById('portingFilterFrom') ? document.getElementById('portingFilterFrom').value : '';
+            const toVal = document.getElementById('portingFilterTo') ? document.getElementById('portingFilterTo').value : '';
+            
+            if (fromVal || toVal) {
+                let fromDate = fromVal ? new Date(fromVal) : new Date('1900-01-01');
+                let toDate = toVal ? new Date(toVal) : new Date('2100-01-01');
+                toDate.setHours(23, 59, 59, 999);
+                
+                records = records.filter(r => {
+                    const rowDateStr = toNativeDate(r.date);
+                    if(!rowDateStr) return true; // skip filtering if date is malformed
+                    const rowDate = new Date(rowDateStr);
+                    return rowDate >= fromDate && rowDate <= toDate;
+                });
+            }
 
             records.sort((a, b) => new Date(toNativeDate(a.date)) - new Date(toNativeDate(b.date)));
 
             if(records.length === 0) {
-                const msg = appState.currentMonth === "All" ? "No porting entries found for this agent." : `No porting entries found for ${appState.currentMonth}.`;
-                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">${msg}</td></tr>`;
+                const msg = "No porting entries found for the selected criteria.";
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">${msg}</td></tr>`;
             }
 
             records.forEach(row => {
