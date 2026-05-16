@@ -576,7 +576,11 @@
                     const cloudData = docSnap.data();
                     // Merge incoming data, preserving UI state like currentMonth
                     const currentMonth = appState.currentMonth || "All";
+                    const preservedAgentId = currentUserRole === "agent" ? appState.currentAgentId : cloudData.currentAgentId;
                     appState = { ...appState, ...cloudData, currentMonth };
+                    if (currentUserRole === "agent" && preservedAgentId) {
+                        appState.currentAgentId = preservedAgentId;
+                    }
                     initializeAppUI();
                 } else if (currentUserRole === "admin") {
                     // Check if they have old local data to migrate to the cloud on first login
