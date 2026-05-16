@@ -236,6 +236,7 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 whitespace-nowrap border-b border-gray-200">
                                 <tr>
                                     <th class="px-6 py-4">Date</th>
+                                    <th class="px-6 py-4">Sub Agent</th>
                                     <th class="px-6 py-4">Customer Mobile</th>
                                     <th class="px-6 py-4">FR Value</th>
                                     <th class="px-6 py-4">Status</th>
@@ -395,6 +396,10 @@
                 <div class="mb-4">
                     <label class="block text-sm font-bold text-gray-700 mb-1">Porting Date</label>
                     <input type="date" id="inp-portingDate" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Sub Agent Name (Optional)</label>
+                    <input type="text" id="inp-portingSubAgent" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-bold text-gray-700 mb-1">Customer Mobile Number</label>
@@ -1453,7 +1458,7 @@
 
             if(records.length === 0) {
                 const msg = "No porting entries found for the selected criteria.";
-                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">${msg}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500 font-medium bg-white">${msg}</td></tr>`;
             }
 
             records.forEach(row => {
@@ -1463,6 +1468,7 @@
                 tr.className = "border-b border-gray-100 hover:bg-gray-50 transition-colors bg-white";
                 tr.innerHTML = `
                     <td class="px-6 py-4 font-bold text-gray-800">${row.date}</td>
+                    <td class="px-6 py-4 text-gray-600">${row.subAgent || '-'}</td>
                     <td class="px-6 py-4 text-gray-600">${row.mobile}</td>
                     <td class="px-6 py-4 font-bold text-gray-800">₹${row.frValue || 0}</td>
                     <td class="px-6 py-4">
@@ -1484,6 +1490,7 @@
             document.getElementById('portingModalTitle').textContent = "Add Porting Entry";
             const today = new Date();
             document.getElementById('inp-portingDate').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            document.getElementById('inp-portingSubAgent').value = "";
             document.getElementById('inp-portingMobile').value = "";
             document.getElementById('inp-portingFR').value = "";
             document.getElementById('inp-portingStatus').value = "Pending";
@@ -1511,6 +1518,7 @@
             
             const newRecordData = {
                 date: formattedDate,
+                subAgent: document.getElementById('inp-portingSubAgent').value.trim(),
                 mobile: document.getElementById('inp-portingMobile').value,
                 frValue: document.getElementById('inp-portingFR').value,
                 status: document.getElementById('inp-portingStatus').value,
@@ -1540,6 +1548,7 @@
             document.getElementById('portingModalTitle').textContent = "Edit Porting Entry";
             document.getElementById('edit-portingId').value = record.id;
             document.getElementById('inp-portingDate').value = toNativeDate(record.date);
+            document.getElementById('inp-portingSubAgent').value = record.subAgent || "";
             document.getElementById('inp-portingMobile').value = record.mobile || "";
             document.getElementById('inp-portingFR').value = record.frValue || "";
             document.getElementById('inp-portingStatus').value = record.status || "Pending";
@@ -1565,6 +1574,7 @@
             const excelData = records.map(r => {
                 return {
                     "Porting Date": r.date,
+                    "Sub Agent": r.subAgent || "",
                     "Customer Mobile": r.mobile,
                     "FR Value": r.frValue || 0,
                     "Status": r.status,
@@ -1615,6 +1625,7 @@
                         "Agent Name": agent.name,
                         "Agent Phone": agent.phone,
                         "Porting Date": r.date,
+                        "Sub Agent": r.subAgent || "",
                         "Customer Mobile": r.mobile,
                         "FR Value": r.frValue || 0,
                         "Status": r.status,
