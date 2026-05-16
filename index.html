@@ -107,9 +107,14 @@
                         <h1 class="text-2xl font-bold text-gray-900">Overall Agent Report</h1>
                         <p class="text-gray-500" id="dash-subtitle">Consolidated Data</p>
                     </div>
-                    <button onclick="openAgentModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded shadow-sm font-medium transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
-                        + Add New Agent
-                    </button>
+                    <div class="flex gap-2 w-full sm:w-auto flex-col sm:flex-row">
+                        <button onclick="exportAdminData()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg shadow-sm font-medium transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+                            Export All Data
+                        </button>
+                        <button onclick="openAgentModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm font-medium transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+                            + Add New Agent
+                        </button>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -1539,6 +1544,72 @@
             const agentName = agentData ? agentData.name.replace(/\s+/g, '_') : 'Agent';
             const fileMonth = appState.currentMonth === "All" ? "All_Time" : appState.currentMonth.replace(/\s+/g, '');
             XLSX.writeFile(wb, `${agentName}_Porting_Report_${fileMonth}.xlsx`);
+        }
+        function exportAdminData() {
+            if (appState.agents.length === 0) { alert("No agents exist to export data."); return; }
+
+            const wb = XLSX.utils.book_new();
+
+            // Sheet 1: Daily Entries (All Agents)
+            let allDailyRecords = [];
+            appState.agents.forEach(agent => {
+                const records = appState.records[agent.id] || [];
+                const filtered = appState.currentMonth === "All" ? records : records.filter(r => r.date.includes(appState.currentMonth));
+                filtered.forEach(r => {
+                    let obj = { "Agent Name": agent.name, "Agent Phone": agent.phone, "Date": r.date };
+                    appState.settings.frTypes.forEach(fr => { obj[fr.label] = r[fr.id] || 0; });
+                    obj["Sim Taken"] = r.simTaken || 0; obj["Recharge"] = r.recharge || 0; obj["Recharge Paid/Not"] = r.rPaid || "";
+                    obj["Pending R/P"] = r.pendingRP || 0; obj["New Sim"] = r.newSim || 0; obj["Amount"] = r.amount || 0; obj["Pending"] = r.pending || "";
+                    allDailyRecords.push(obj);
+                });
+            });
+
+            if (allDailyRecords.length > 0) {
+                const ws1 = XLSX.utils.json_to_sheet(allDailyRecords);
+                XLSX.utils.book_append_sheet(wb, ws1, "Daily_Entries");
+            }
+
+            // Sheet 2: Porting Entries (All Agents)
+            let allPortingRecords = [];
+            appState.agents.forEach(agent => {
+                const records = appState.portingRecords[agent.id] || [];
+                const filtered = appState.currentMonth === "All" ? records : records.filter(r => r.date.includes(appState.currentMonth) || (r.doneDate && r.doneDate.includes(appState.currentMonth)));
+                filtered.forEach(r => {
+                    allPortingRecords.push({
+                        "Agent Name": agent.name,
+                        "Agent Phone": agent.phone,
+                        "Porting Date": r.date,
+                        "Customer Mobile": r.mobile,
+                        "FR Value": r.frValue || 0,
+                        "Status": r.status,
+                        "Done Date": r.doneDate || ""
+                    });
+                });
+            });
+
+            if (allPortingRecords.length > 0) {
+                const ws2 = XLSX.utils.json_to_sheet(allPortingRecords);
+                XLSX.utils.book_append_sheet(wb, ws2, "Porting_Entries");
+            }
+            
+            // Sheet 3: Agent Directory
+            const agentData = appState.agents.map(a => ({
+                "Agent Name": a.name,
+                "Phone": a.phone,
+                "Login Email": a.email
+            }));
+            if (agentData.length > 0) {
+                const ws3 = XLSX.utils.json_to_sheet(agentData);
+                XLSX.utils.book_append_sheet(wb, ws3, "Agent_Directory");
+            }
+
+            if(wb.SheetNames.length === 0) {
+                alert("No data to export for this month selection.");
+                return;
+            }
+
+            const fileMonth = appState.currentMonth === "All" ? "All_Time" : appState.currentMonth.replace(/\s+/g, '');
+            XLSX.writeFile(wb, `BillingHub_Full_Export_${fileMonth}.xlsx`);
         }
     </script>
 </body>
