@@ -1190,9 +1190,23 @@
             const agentPassword = document.getElementById('inp-agentPassword').value;
 
             try {
-                // Create Auth Account in secondary app
-                const userCred = await secondaryAuth.createUserWithEmailAndPassword(agentEmail, agentPassword);
-                const agentAuthUid = userCred.user.uid;
+                let agentAuthUid;
+                try {
+                    // Create Auth Account in secondary app
+                    const userCred = await secondaryAuth.createUserWithEmailAndPassword(agentEmail, agentPassword);
+                    agentAuthUid = userCred.user.uid;
+                } catch(authError) {
+                    if (authError.code === 'auth/email-already-in-use') {
+                        try {
+                            const userCred = await secondaryAuth.signInWithEmailAndPassword(agentEmail, agentPassword);
+                            agentAuthUid = userCred.user.uid;
+                        } catch(loginError) {
+                            throw new Error("This email is already registered. To re-add this agent, please enter their exact original password. Otherwise, use a different email.");
+                        }
+                    } else {
+                        throw authError;
+                    }
+                }
 
                 // Add to Global Agent Directory
                 const newId = 'agent_' + Date.now();
